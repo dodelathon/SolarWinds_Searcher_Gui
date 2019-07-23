@@ -1,0 +1,44 @@
+﻿<Window x:Class="SolarWinds_Searcher_Gui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SolarWinds_Searcher_Gui"
+        mc:Ignorable="d"
+        Title="Solarwinds_Searcher" Height="450.8" Width="432.8">
+    <Grid Margin="0,0,20.6,1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="32*"/>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="365*"/>
+        </Grid.ColumnDefinitions>
+        <CheckBox x:Name="Auto_SearchBox" Content="Auto-Search" Height="17" Margin="0,323,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Column="1" Checked="Autosearch_Checked" Unchecked="Autosearch_UnChecked" HorizontalAlignment="Left" Width="164"/>
+        <CheckBox x:Name="CustomBox" Content="Customize search parameters" HorizontalAlignment="Left" Margin="0,345,0,0" VerticalAlignment="Top" Width="79" Grid.ColumnSpan="2" RenderTransformOrigin="0.544,-0.572" Grid.Column="1" Height="15" Checked="CustomBox_Checked" Unchecked="CustomBox_UnChecked"/>
+        <Button x:Name="BeginBut" Content="Start" HorizontalAlignment="Left" Margin="0,378,0,0" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2" RenderTransformOrigin="0.151,0.609" Grid.Column="1" Height="19" Click="Button_Click"/>
+        <ComboBox x:Name="ExcelCombo" Grid.Column="1" HorizontalAlignment="Left" Margin="0,42,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Height="22" SelectionChanged="ExcelCombo_SelectionChanged"/>
+        <ComboBox x:Name="SheetCombo" HorizontalAlignment="Left" Margin="0,161,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Grid.Column="1" RenderTransformOrigin="0.497,0.593" Height="22" SelectionChanged="SheetCombo_SelectionChanged"/>
+        <ComboBox x:Name="ColCombo" Grid.Column="1" HorizontalAlignment="Left" Margin="0,214,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" Height="22" SelectionChanged="ColCombo_SelectionChanged"/>
+        <Label Content="Please choose the column you want to read from!" Grid.Column="1" HorizontalAlignment="Left" Margin="0,183,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="290" Height="26"/>
+        <Label Content="Please select the sheet you wish to read from!" Grid.Column="1" HorizontalAlignment="Left" Margin="0,135,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="290" Height="26"/>
+        <Label x:Name="ExcelComboLabel" Content="Please select the file you want to search from!" Grid.Column="1" HorizontalAlignment="Left" Margin="0,11,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="290" Height="26"/>
+        <Label Content="Or" Grid.Column="2" HorizontalAlignment="Left" Margin="163,42,0,0" VerticalAlignment="Top" Width="42" FontWeight="Bold"/>
+        <Label x:Name="ExcelPathLabel" Content="Please enter the full path!" Grid.Column="1" HorizontalAlignment="Left" Margin="0,81,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="290" Height="26"/>
+        <TextBox x:Name="ExcelPathBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <CheckBox x:Name="FileInputSwitch" Content="Requested file isn't there!" Grid.Column="2" HorizontalAlignment="Left" Margin="219,48,0,0" VerticalAlignment="Top" Checked="FileInputSwitch_Checked"  Unchecked="FileInputSwitch_UnChecked"/>
+        <Button x:Name="PathButton" Content="Validate" Grid.Column="2" HorizontalAlignment="Left" Margin="134.2,107,0,0" VerticalAlignment="Top" Width="62" Height="23" Click="PathButton_Click"/>
+        <Button x:Name="Refresh" Content="Refresh"  Grid.Column="2" HorizontalAlignment="Left" Margin="134.2,164,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <Button x:Name="HelpButton" Content="Help" Grid.Column="2" HorizontalAlignment="Left" Margin="320.2,379,0,0" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.469,0.396" Height="21" Click="HelpButton_Click">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="1.389"/>
+                    <RotateTransform Angle="359.528"/>
+                    <TranslateTransform X="0.196" Y="-0.049"/>
+                </TransformGroup>
+            </Button.RenderTransform>
+        </Button>
+        <ComboBox x:Name="AttributeCombo" Grid.Column="2" HorizontalAlignment="Left" Margin="0.2,262,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged"/>
+        <Label Content="Please select the Attribute to search for!" Grid.Column="2" HorizontalAlignment="Left" Margin="0.2,236,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

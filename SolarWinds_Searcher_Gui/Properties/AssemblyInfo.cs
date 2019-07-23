@@ -7,8 +7,8 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SolarWinds_Searcher_Gui")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SolarWinds Searcher")]
+[assembly: AssemblyDescription("Search for the existance of nodes based on a specified attribute, from an excel file")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SolarWinds_Searcher_Gui")]

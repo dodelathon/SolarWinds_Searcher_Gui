@@ -1,0 +1,19 @@
+﻿<Window x:Class="SolarWinds_Searcher_Gui.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SolarWinds_Searcher_Gui"
+        mc:Ignorable="d"
+        Title="Error" Height="192.254" Width="267.606">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="39*"/>
+            <ColumnDefinition Width="44*"/>
+            <ColumnDefinition Width="178*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Please Enter a valid number!" HorizontalAlignment="Left" Height="31" Margin="2.8,56,0,0" VerticalAlignment="Top" Width="211" FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <Button Content="Okay" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="4.8,118,0,0" Grid.Column="2" Height="19" Click="Button_Click"/>
+
+    </Grid>
+</Window>
