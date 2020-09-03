@@ -217,20 +217,12 @@ namespace SolarWinds_Searcher_Gui
 
         private void PopulateColCombo()
         {
-            int[] colVals = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-            Console.WriteLine("Here");
             Dispatcher.Invoke(() =>
             {
                 ColCombo.Items.Clear();
-                foreach (int i in colVals)
+                for (int i = 0; i < 100; i++)
                 {
-                    Console.WriteLine(i);
                     ColCombo.Items.Add(i);
-                }
-                foreach(object i in ColCombo.Items)
-                {
-                    Console.WriteLine(i.ToString());
                 }
                 ColCombo.Items.MoveCurrentToFirst();
                 PopulateAttributeCombo();
@@ -408,7 +400,7 @@ namespace SolarWinds_Searcher_Gui
         private void ColCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             
-            if (col != 11 && col != 12 && ColCombo.Items.IsEmpty != true)
+            if (col != 101 && col != 102 && ColCombo.Items.IsEmpty != true)
             {
                 col = int.Parse(ColCombo.SelectedItem.ToString());
                 AttributeCombo.IsEnabled = true;
@@ -416,7 +408,7 @@ namespace SolarWinds_Searcher_Gui
             
         }
 
-        private void DivvyExcel()
+        private async void DivvyExcel()
         {
             //itemCount -= 4;
             double FirstQuarter = /*Math.Round*/((double)itemCount / 4);
@@ -524,10 +516,10 @@ namespace SolarWinds_Searcher_Gui
                     }
                 });
 
-                runner1.Wait();
-                runner2.Wait();
-                runner3.Wait();
-                runner4.Wait();
+                await runner1;
+                await runner2;
+                await runner3;
+                await runner4;
                 Dispatcher.Invoke(() =>
                 {
                     InitialConfig(2);
