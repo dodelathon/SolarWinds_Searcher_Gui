@@ -77,7 +77,7 @@ namespace SolarWinds_Searcher_Gui
             InitialConfig(0);
             Attributes = new string[]{ "Node Name", "IP Address", "IP Version", "DNS", "Machine Type", "Vendor", "Desciption", "Location", "Contact", "Status", "Software Image",
                "Software Version", "Asset_Environment", "Asset_Location", "Asset_Model", "Asset_State", "Cyber_Security_Classification", "Cybersecurity_Function",
-               "Decomm_Year", "eFIApplication", "EOL_Date_HW", "EOL_Date_SW", "Hardware_Owner", "Holiday_Readiness", "Impact", "Imported_From_NCM", "InServiceDate",
+               "Decom_Year", "DeviceType", "eFIApplication", "EOL_Date_HW", "EOL_Date_SW", "Hardware_Owner", "Holiday_Readiness", "Impact", "Imported_From_NCM", "InServiceDate",
                "Internet_Facing", "Legacy_Environment", "Local_Contact", "Management_Server", "Model_Category", "Network_Diagram", "Owner", "Physical_Host", "PONumber",
                "PurchaseDate", "PurchasePrice", "PurchasePrice_Maintenance", "QueueEmail", "Rack", "Rack_DataCenter", "Region", "Replacement_Cost", "Serial_Number",
                "SNOW_Assignment_Group", "SNOW_Configuration_Item", "SNOW_Product_Name", "Splunk_Index", "Splunk_Sourcetypes", "Term_End_Date", "Term_Start_Date", "Vendor"};
