@@ -76,11 +76,12 @@ namespace SolarWinds_Searcher_Gui
             MinHeight = 450;
             InitialConfig(0);
             Attributes = new string[]{ "Node Name", "IP Address", "IP Version", "DNS", "Machine Type", "Vendor", "Desciption", "Location", "Contact", "Status", "Software Image",
-               "Software Version", "Asset_Environment", "Asset_Location", "Asset_Model", "Asset_State", "Cyber_Security_Classification", "Cybersecurity_Function",
-               "Decomm_Year", "eFIApplication", "EOL_Date_HW", "EOL_Date_SW", "Hardware_Owner", "Holiday_Readiness", "Impact", "Imported_From_NCM", "InServiceDate",
-               "Internet_Facing", "Legacy_Environment", "Local_Contact", "Management_Server", "Model_Category", "Network_Diagram", "Owner", "Physical_Host", "PONumber",
-               "PurchaseDate", "PurchasePrice", "PurchasePrice_Maintenance", "QueueEmail", "Rack", "Rack_DataCenter", "Region", "Replacement_Cost", "Serial_Number",
-               "SNOW_Assignment_Group", "SNOW_Configuration_Item", "SNOW_Product_Name", "Splunk_Index", "Splunk_Sourcetypes", "Term_End_Date", "Term_Start_Date", "Vendor"};
+               "Software Version","Asset_AppVersion",  "Asset_Environment", "Asset_Location", "Asset_Model","Asset_OS",  "Asset_State", "Cyber_Security_Classification", "Cybersecurity_Function", 
+               "Cybersecurity_Pillar",
+               "Decom_Year", "DeviceType", "eFIApplication", "EOL_Date_HW", "EOL_Date_SW", "EOL_InScope", "Hardware_Owner", "Holiday_Readiness", "Impact", "Imported_From_NCM", "InServiceDate",
+               "Internet_Facing", "Legacy_Environment", "Local_Contact", "Management_Server", "Model_Category", "Network_Diagram", "Owner", "Physical_Host", "PONumber", "PrefferedPoller", 
+               "PurchaseDate", "PurchasePrice", "PurchasePrice_Maintenance", "QueueEmail", "QueueEmail02", "Rack", "Rack_DataCenter", "Region", "Replacement_Cost", "Replacement_Model", "Serial_Number",
+               "SNOW_Assignment_Group", "SNOW_Configuration_Item", "SNOW_Product_Application_Name", "SNOW_Product_Name", "Splunk_Index", "Splunk_Sourcetypes", "Term_End_Date", "Term_Start_Date", "Vendor"};
             Closing += Mainwindow_Closing;
             Task t = Task.Factory.StartNew(() => PopulateExcelCombo());
         }
@@ -106,24 +107,6 @@ namespace SolarWinds_Searcher_Gui
                 excel.Close();
             }
         }
-
-        /*private void SetPath()
-        {
-           
-            const string name = "Path";
-            string pathvar = Environment.GetEnvironmentVariable(name);
-            var value = pathvar + "C:\\Program Files\\ChromeDriver";
-            value += ";C:\\Program Files\\ChromeDriver\\WebDriver.dll";
-            value += ";C:\\Program Files\\ChromeDriver\\WebDriver.Support.dll";
-            if (!(pathvar.Equals(value)))
-            {
-                Console.WriteLine(value);
-
-                var target = EnvironmentVariableTarget.Machine;
-                Environment.SetEnvironmentVariable(name, value, target);
-                Console.WriteLine(pathvar);
-            }
-        }*/
 
         private void InitialConfig(int mode)
         {
@@ -266,7 +249,7 @@ namespace SolarWinds_Searcher_Gui
                 try
                 {
                     excel.SetSheetName(SheetComboVal);
-                    if (col == 11 || col == 12)
+                    if (col == 101 || col == 102)
                     {
                         int[] arr = excel.FindStart(RowsAcross, ColsAcross, Attribute);
                         col = arr[1];
@@ -304,8 +287,9 @@ namespace SolarWinds_Searcher_Gui
 
         private void Autosearch_Checked(object sender, RoutedEventArgs e)
         {
-            col = 11;
+            col = 101;
             CustomBox.IsEnabled = true;
+            ColCombo.IsEnabled = false;
         }
 
         private void Autosearch_UnChecked(object sender, RoutedEventArgs e)
@@ -319,16 +303,17 @@ namespace SolarWinds_Searcher_Gui
             }
             CustomBox.IsChecked = false;
             CustomBox.IsEnabled = false;
+            ColCombo.IsEnabled = true;
         }
 
-        private void ExcelCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ExcelCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ExcelCombo.SelectedItem != null)
             {
                 string val = path + "\\" + ExcelCombo.SelectedItem.ToString();
-                Console.WriteLine(val);
-                Thread t = new Thread(() => PopulateSheetCombo(val));
-                t.Start();
+                //Console.WriteLine(val);
+                Task t = Task.Factory.StartNew(() => PopulateSheetCombo(val));
+                await t;
                 SheetCombo.IsEnabled = true;
             }
         }
@@ -371,7 +356,7 @@ namespace SolarWinds_Searcher_Gui
 
         private void CustomBox_Checked(object sender, RoutedEventArgs e)
         {
-            col = 12;
+            col = 102;
             customParams = new CustomParams(this, Attributes);
             customParams.Activate();
             customParams.Visibility = Visibility.Visible;    
@@ -381,7 +366,7 @@ namespace SolarWinds_Searcher_Gui
         {
             if (Auto_SearchBox.IsChecked == true)
             {
-                col = 11;
+                col = 1;
             }
             else
             {
@@ -411,6 +396,7 @@ namespace SolarWinds_Searcher_Gui
         private async void DivvyExcel()
         {
             //itemCount -= 4;
+            Console.WriteLine(itemCount);
             double FirstQuarter = /*Math.Round*/((double)itemCount / 4);
             double SecondQuarter = /*Math.Round*/((double)(itemCount / 4) * 2);
             double ThirdQuarter = /*Math.Round*/((double)(itemCount / 4) * 3);
@@ -420,30 +406,17 @@ namespace SolarWinds_Searcher_Gui
             SearcherThread searcher3;
             SearcherThread searcher4;
 
-            bool found = false;
-            int i = 0, AttributeIndex = 44;
-            while(found == false)
-            {
-                Console.WriteLine(Attribute + " VS " + Attributes[i]);
-                if(Attribute.Equals(Attributes[i]))
-                {
-                    found = true;
-                    AttributeIndex = (i);
-                }
-                i++;
-            }
-
             try
             {
-                Console.WriteLine(col + " " + FirstQuarter + " " + itemCount);
-                searcher1 = new SearcherThread(excel, col, row, (int)FirstQuarter, AttributeIndex);
-                Console.WriteLine(col + " " + FirstQuarter + " " + SecondQuarter);
-                searcher2 = new SearcherThread(excel, col, (int)FirstQuarter, (int)SecondQuarter, AttributeIndex);
-                Console.WriteLine(col + " " + SecondQuarter + " " + ThirdQuarter);
-                searcher3 = new SearcherThread(excel, col, (int)SecondQuarter, (int)ThirdQuarter, AttributeIndex);
-                Console.WriteLine(col + " " + ThirdQuarter + " " + itemCount);
-                searcher4 = new SearcherThread(excel, col, (int)ThirdQuarter, itemCount, AttributeIndex);
-
+                //Console.WriteLine(col + " " + row + " " + FirstQuarter);
+                
+                //Console.WriteLine(col + " " + FirstQuarter + " " + SecondQuarter);
+                
+                //Console.WriteLine(col + " " + SecondQuarter + " " + ThirdQuarter);
+               
+                //Console.WriteLine(col + " " + ThirdQuarter + " " + itemCount);
+               
+                searcher1 = new SearcherThread(excel, col, row, (int)FirstQuarter, Attribute);
                 Task runner1 = Task.Factory.StartNew(() =>
                 {
                     try
@@ -462,6 +435,8 @@ namespace SolarWinds_Searcher_Gui
                         });
                     }
                 });
+                
+                searcher2 = new SearcherThread(excel, col, (int)FirstQuarter, (int)SecondQuarter, Attribute);
                 Task runner2 = Task.Factory.StartNew(() =>
                 {
                     try
@@ -480,6 +455,8 @@ namespace SolarWinds_Searcher_Gui
                         });
                     }
                 });
+
+                searcher3 = new SearcherThread(excel, col, (int)SecondQuarter, (int)ThirdQuarter, Attribute);
                 Task runner3 = Task.Factory.StartNew(() =>
                 {
                     try
@@ -497,6 +474,8 @@ namespace SolarWinds_Searcher_Gui
                         });
                     }
                 });
+                
+                searcher4 = new SearcherThread(excel, col, (int)ThirdQuarter, itemCount, Attribute);
                 Task runner4 = Task.Factory.StartNew(() =>
                 {
                     try
@@ -564,7 +543,7 @@ namespace SolarWinds_Searcher_Gui
                         dirPath += path[i];
                     }
                 }
-                Console.WriteLine(dirPath);
+                //Console.WriteLine(dirPath);
                 if (Directory.Exists(dirPath))
                 {
                     SheetCombo.IsEnabled = true;
@@ -582,13 +561,13 @@ namespace SolarWinds_Searcher_Gui
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
             if (Refreshing == false)
             {
                 Refreshing = true;
                 Task t = Task.Factory.StartNew(() => PopulateExcelCombo());
-                // t.Wait()
+                await t;
                 BeginBut.IsEnabled = false;
                 Auto_SearchBox.IsEnabled = true;
                 Started = false;

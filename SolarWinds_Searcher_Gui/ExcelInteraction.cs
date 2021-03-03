@@ -158,7 +158,7 @@ namespace SolarWinds_Searcher_Gui
 
         public string GetNext(long row, long col)
         {
-            return Feeder.Cells.Item[row, col].Value2;
+            return Feeder.Cells.Item[row, col].Value2 +"";
         }
 
         public Collection<string> GetSheets()
@@ -193,7 +193,7 @@ namespace SolarWinds_Searcher_Gui
                     string temp = (Feeder.Cells.Item[i, j].Value2).ToString();
                     if (temp != null)
                     {
-                        Console.WriteLine(temp);
+                        //Console.WriteLine(temp);
                         temp = temp.ToLower();
                         if (temp.Equals(searcherAttribute.ToLower()))
                         {
@@ -222,9 +222,9 @@ namespace SolarWinds_Searcher_Gui
                 while (conMissCounter < 5)
                 {
                     //Range b = Feeder.Cells[row, col];
-                    Console.WriteLine(row + " " + col);
-                    string val = (string)Feeder.Cells.Item[row, col].Value2;
-                    Console.WriteLine(val);
+                    //Console.WriteLine(row + " " + col);
+                    string val = "" + Feeder.Cells.Item[row, col].Value2;
+                    //Console.WriteLine(val);
                     if (val == null || val.Equals(""))
                     {
                         conMissCounter++;
@@ -244,6 +244,7 @@ namespace SolarWinds_Searcher_Gui
             }
             catch(Exception e)
             {
+                Console.WriteLine(e.Message);
                 return -1;
             }
         }
@@ -285,12 +286,7 @@ namespace SolarWinds_Searcher_Gui
                 wb.Close();
             }
             catch
-            {
-                cFail = new ExcelCloseFailPopUp
-                {
-                    Visible = true
-                };
-            }
+            {}
         }
 
         public void DeDupe()

@@ -16,26 +16,26 @@ namespace SolarWinds_Searcher_Gui
     {
         private readonly ChromeDriver chrome;
         private ExcelInteraction handle;
-        private int attributeIndex;
+        private string attribute;
         private int col;
         private int min;
         private int max;
 
-        public SearcherThread(ExcelInteraction handle, int col, int min, int max, int attribute)
+        public SearcherThread(ExcelInteraction handle, int col, int min, int max, string attribute)
         {
-            attributeIndex = attribute;
+            this.attribute = attribute;
             this.col = col;
             this.min = min;
             this.max = max;
             this.handle = handle;
-            Console.WriteLine("Here");
             try
             {
                 ChromeOptions options = new ChromeOptions();
-                options.AddArgument("headless");
+                //options.AddArgument("headless");
                 var chromeDriverService = ChromeDriverService.CreateDefaultService("C:\\Program Files\\ChromeDriver");
                 chromeDriverService.HideCommandPromptWindow = true;
                 chrome = new ChromeDriver(chromeDriverService, options);
+                chrome.Manage().Timeouts().PageLoad.Add(TimeSpan.FromMinutes(5));
             }
             catch(Exception e)
             {
@@ -46,9 +46,10 @@ namespace SolarWinds_Searcher_Gui
 
         private void Search(int row)
         {
-            
+           // Console.WriteLine(Thread.CurrentThread.ManagedThreadId + " Column: " + col);
             string valueToSearch = handle.GetNext(row, col);
-            if (valueToSearch != null)
+            //Console.WriteLine(Thread.CurrentThread.ManagedThreadId + " Value: " + valueToSearch);
+            if (valueToSearch != null && !valueToSearch.Contains("Unknown") && !valueToSearch.Equals("") && !valueToSearch.Equals("Can't retrieve from SNMP or CLI"))
             {
                 string textboxName = "ctl00$ctl00$ctl00$BodyContent$ContentPlaceHolder1$MainContentPlaceHolder$ResourceHostControl1$resContainer$rptContainers$ctl00$rptColumn1$ctl00$ctl01$Wrapper$txtSearchString";
                 string attributeDropdown = "ctl00$ctl00$ctl00$BodyContent$ContentPlaceHolder1$MainContentPlaceHolder$ResourceHostControl1$resContainer$rptContainers$ctl00$rptColumn1$ctl00$ctl01$Wrapper$lbxNodeProperty";
@@ -69,7 +70,8 @@ namespace SolarWinds_Searcher_Gui
                     //Console.WriteLine("HHHHHHH");
                     searchBox.SendKeys(valueToSearch);
                     //Console.WriteLine("HHHHHHH");
-                    select.SelectByIndex(attributeIndex);
+                    select.SelectByText(attribute);
+                    //select.SelectByIndex(attributeIndex);
                    // Console.WriteLine("uyguygufuov");
                     searchBtn.Click();
                    // Console.WriteLine("HHHHHHH");
@@ -80,6 +82,7 @@ namespace SolarWinds_Searcher_Gui
                     }
 
                     string result = chrome.FindElementByClassName("StatusMessage").Text;
+                    //Console.WriteLine(result);
                     if (result.Contains("Nodes with ") && result.Contains(" similar to "))
                     {
                         ReadOnlyCollection<OpenQA.Selenium.IWebElement> amount = chrome.FindElementsByClassName("StatusIcon");
@@ -93,22 +96,31 @@ namespace SolarWinds_Searcher_Gui
                 }
                 catch (Exception e)
                 {
-                    throw new WebSearchException(Thread.CurrentThread.ManagedThreadId.ToString());
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    //throw new WebSearchException(Thread.CurrentThread.ManagedThreadId.ToString());
                 }
+            }
+            else
+            {
+                handle.AddResult(row, valueToSearch, "Invalid", "0");
             }
         }
 
         public int SearchWrapper()
         {
+            int i;
             try
             {
-                for (int i = min; i < max; i++)
+                for (i = min; i < max; i++)
                 {
                     Search(i);
                 }
+                chrome.Quit();
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw new SearcherThreadException(e.Message, e);
             }
             finally
@@ -140,6 +152,7 @@ namespace SolarWinds_Searcher_Gui
             }
             catch(Exception e)
             {
+                //Console.WriteLine(e.Message);
                 return false;
             }
         }
